@@ -35,21 +35,26 @@
 ;;; Code:
 
 (defvar jtl-stack nil
-  "Stack of positions.")
+  "Stack of mark.")
 
 (defvar jtl-history nil
-  "History of positions.")
+  "History of commands.")
 
 ;;;###autoload
-(defun jump-to-line ()
+(defun jump-to-line (n)
   "Comment."
-  (interactive)
-  (let ((target (jtl-ffap-file-line-at-point)))
+  (interactive "P")
+  (let ((pair            (jtl-ffap-file-line-at-point))
+        (is-other-window (consp n)))
     (jtl-push-stack (point-marker))
-    (if target
-        (jtl-find-goto-line (car target) (cdr target))
-      (let ((input (read-string "Jump to: " (thing-at-point 'filename) 'jtl-history)))
-        (message "Not found.")))))
+    (if pair
+        (let ((filename (car pair))
+              (lineno   (cdr pair)))
+          (jtl-push-history   (format "%s:%s" filename lineno))
+          (jtl-find-goto-line filename lineno is-other-window))
+      (let* ((input (read-string "Jump to: " (thing-at-point 'filename) 'jtl-history))
+             (list  (split-string input ":")))
+        (jtl-find-goto-line (nth 0 list) (string-to-number (nth 1 list)) is-other-window)))))
 
 ;;;###autoload
 (defun jtl-back ()
@@ -74,8 +79,10 @@ a.txt   ;-> (a.txt . 1)
               (cons it (string-to-number (match-string 1)))
             (cons it 1))))))
 
-(defun jtl-find-goto-line (filename lineno)
-  (find-file      filename)
+(defun jtl-find-goto-line (filename lineno &optional is-other-window)
+  (if is-other-window
+    (find-file-other-window  filename)
+    (find-file filename))
   (jtl-goto-line  lineno))
 
 (defun jtl-jump-mark (mark)
@@ -93,6 +100,9 @@ a.txt   ;-> (a.txt . 1)
   (let ((mark (car jtl-stack)))
     (setq jtl-stack (cdr jtl-stack))
     mark))
+
+(defun jtl-push-history (str)
+  (setq jtl-history (cons str jtl-history)))
 
 (provide 'jump-to-line)
 ;;; jump-to-line.el ends here
