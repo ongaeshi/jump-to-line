@@ -7,9 +7,9 @@ Back to position before the jump.
 
 ```
 [Example]
- /path/to/a.txt:5
- ./a.txt:5
-  a.txt
+/path/to/a.txt:5
+./a.txt:5
+ a.txt
 ```
 
 ## Install
@@ -22,7 +22,7 @@ Comming soon.
 ````
 
 ## Initial setting
-```lisp:.eamcs.d/init.el
+```lisp
 (require 'jump-to-line)
 
 ;; Set of key bindings

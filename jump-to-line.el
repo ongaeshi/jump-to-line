@@ -26,9 +26,9 @@
 :; Back to position before the jump.
 ;;
 ;; [Example]
-;;  /path/to/a.txt:5
-;;  ./a.txt:5
-;;  a.txt
+;; /path/to/a.txt:5
+;; ./a.txt:5
+;; a.txt
 
 ;; URL
 ;;   https://github.com/ongaeshi/jump-to-line
