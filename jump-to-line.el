@@ -105,6 +105,7 @@ a.txt   ;-> (a.txt . 1)
   (goto-char (point-min))
   (goto-char (point-at-bol lineno)))
 
+;;;###autoload
 (defun jtl-push-stack (mark)
   (setq jtl-stack (cons mark jtl-stack)))
 
