@@ -22,7 +22,19 @@
 
 ;;; Commentary:
 
+;; Jump to line number at point.
+:; Can return to the position before the jump.
+;;
+;; [Example]
+;;  /path/to/a.txt:5
+;;  ./a.txt:5
+;;  a.txt
+
+;; URL
+;;   https://github.com/ongaeshi/jump-to-line
+
 ;;; Install:
+;;   (auto-install-from-url "https://raw.github.com/ongaeshi/jump-to-line/master/jump-to-line.el")
 
 ;;; Initlial Setting:
 
