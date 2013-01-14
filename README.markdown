@@ -2,19 +2,27 @@ jump-to-line.el
 =====================
 
 Jump to line number at point.
-Can return to the position before the jump.
+
+Back to position before the jump.
+
+```
+[Example]
+ /path/to/a.txt:5
+ ./a.txt:5
+  a.txt
+```
 
 ## Install
 ### melpa
 Comming soon.
 
 ### auto-install
-```elisp
+```lisp
 (auto-install-from-url "https://raw.github.com/ongaeshi/jump-to-line/master/jump-to-line.el")
 ````
 
 ## Initial setting
-```elisp:.eamcs.d/init.el
+```lisp:.eamcs.d/init.el
 (require 'jump-to-line)
 
 ;; Set of key bindings

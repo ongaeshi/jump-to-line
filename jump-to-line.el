@@ -23,7 +23,7 @@
 ;;; Commentary:
 
 ;; Jump to line number at point.
-:; Can return to the position before the jump.
+:; Back to position before the jump.
 ;;
 ;; [Example]
 ;;  /path/to/a.txt:5
