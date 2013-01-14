@@ -27,7 +27,7 @@ Comming soon.
 
 ;; Set of key bindings
 (global-set-key (kbd "C-c C-j") 'jump-to-line) ; Jump
-(global-set-key (kbd "C-c C-b") 'jtl-back)     ; Back
+(global-set-key (kbd "C-c b")   'jtl-back)     ; Back
 ```
 
 ## Lisence
