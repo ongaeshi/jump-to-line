@@ -26,12 +26,53 @@
 
 ;;; Initlial Setting:
 
+;; (require 'jump-to-line)
+;; 
+;; ;; Key bindings
+;; (global-set-key (kbd "C-c C-j") 'jump-to-line) ; Jump
+;; (global-set-key (kbd "C-c C-b") 'jtl-back)     ; Back
+
 ;;; Code:
+
+(defvar jtl-stack nil
+  "Stack of positions.")
 
 ;;;###autoload
 (defun jump-to-line ()
+  "Comment."
   (interactive)
-  (message "jump-to-line"))
+  (jtl-push-stack (point-marker))
+  (jtl-find-goto-line "ChangeLog" 5))
+
+;;;###autoload
+(defun jtl-back ()
+  "Comment."
+  (interactive)
+  (if (null jtl-stack)
+      (error "jtl-stack is empty"))
+  (jtl-jump-mark (jtl-pop-stack)))
+
+;;; Private:
+
+(defun jtl-find-goto-line (filename lineno)
+  (find-file      filename)
+  (jtl-goto-line  lineno))
+
+(defun jtl-jump-mark (mark)
+  (switch-to-buffer (marker-buffer mark))
+  (goto-char        (marker-position mark)))
+
+(defun jtl-goto-line (lineno)
+  (goto-char (point-min))
+  (goto-char (point-at-bol lineno)))
+
+(defun jtl-push-stack (mark)
+  (setq jtl-stack (cons mark jtl-stack)))
+
+(defun jtl-pop-stack ()
+  (let ((mark (car jtl-stack)))
+    (setq jtl-stack (cdr jtl-stack))
+    mark))
 
 (provide 'jump-to-line)
 ;;; auto-shell-command.el ends here
