@@ -79,15 +79,18 @@
 ;;; Private:
 
 (defun jtl-ffap-file-line-at-point ()
-  "a.txt:5 ;-> (a.txt . 5)
-a.txt   ;-> (a.txt . 1)
+  "a.txt:5       ;-> (a.txt . 5)
+a.txt         ;-> (a.txt . 1)
+a.txt(1,2)    ;-> (a.txt, 1) (C#)
+a.txt, line 1 ;-> (a.txt, 1) (Python)
+a.txt line 1  ;-> (a.txt, 1) (Perl)
 "
   (let ((it (ffap-file-at-point)))
     (if it
         (save-excursion
           (beginning-of-line)
           (if (and (search-forward it nil t)
-                     (looking-at ":\\([0-9]+\\)"))
+                     (looking-at "\\(?::\\|(\\| line \\)\\([0-9]+\\)"))
               (cons it (string-to-number (match-string 1)))
             (cons it 1))))))
 
