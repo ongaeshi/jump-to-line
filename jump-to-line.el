@@ -1,9 +1,9 @@
-;;; jump-to-line.el --- Jump to line. 
+;;; jump-to-line.el --- Jump to line number at point.
 
 ;; Copyright (C) 2013 ongaeshi
 
 ;; Author: ongaeshi
-;; Keywords: jump, line, back, file
+;; Keywords: jump, line, back, file, ruby, csharp, python, perl
 ;; Version: 0.1
 ;; Package-Requires:
 
@@ -25,12 +25,17 @@
 ;; Jump to line number at point.
 :; Back to position before the jump.
 ;;
-;; [Example]
-;; /path/to/a.txt:5
-;; ./a.txt:5
-;; a.txt
 
-;; URL
+;;; Examples of jump:
+
+;; /path/to/a.txt:5 ; Jump to /path/to/a.txt, line 5 (Ruby style)
+;; ../a.txt:5       ; Relative path
+;; a.txt            ; Only filename
+;; a.txt(1,2)       ; C# style
+;; a.txt, line 1    ; Python
+;; a.txt line 1     ; Perl
+
+;;; URL:
 ;;   https://github.com/ongaeshi/jump-to-line
 
 ;;; Install:
@@ -39,10 +44,8 @@
 ;;; Initlial Setting:
 
 ;; (require 'jump-to-line)
-;; 
-;; ;; Key bindings
 ;; (global-set-key (kbd "C-c C-j") 'jump-to-line) ; Jump
-;; (global-set-key (kbd "C-c C-b") 'jtl-back)     ; Back
+;; (global-set-key (kbd "C-c b")   'jtl-back)     ; Back
 
 ;;; Code:
 
@@ -79,6 +82,10 @@
       (error "jtl-stack is empty"))
   (jtl-jump-mark (jtl-pop-stack)))
 
+;;;###autoload
+(defun jtl-push-stack (mark)
+  (setq jtl-stack (cons mark jtl-stack)))
+
 ;;; Private:
 
 (defun jtl-ffap-file-line-at-point ()
@@ -112,14 +119,12 @@ a.txt line 1  ;-> (a.txt, 1) (Perl)
   (goto-char (point-min))
   (goto-char (point-at-bol lineno)))
 
-;;;###autoload
-(defun jtl-push-stack (mark)
-  (setq jtl-stack (cons mark jtl-stack)))
-
 (defun jtl-pop-stack ()
   (let ((mark (car jtl-stack)))
     (setq jtl-stack (cdr jtl-stack))
     mark))
+
+;; jtl-push-stack is public
 
 (defun jtl-push-history (str)
   (setq jtl-history (cons str jtl-history)))
