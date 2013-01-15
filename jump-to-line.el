@@ -52,6 +52,9 @@
 (defvar jtl-history nil
   "History of commands.")
 
+(defface jtl-highlight-line-face '((t (:background "#66ccff" :underline t)))
+  "Face for jump highlight." :group 'jump-to-line)
+
 ;;;###autoload
 (defun jump-to-line (n)
   "Comment."
@@ -98,7 +101,8 @@ a.txt line 1  ;-> (a.txt, 1) (Perl)
   (if is-other-window
     (find-file-other-window  filename)
     (find-file filename))
-  (jtl-goto-line  lineno))
+  (jtl-goto-line  lineno)
+  (jtl-highlight-line 0.3))
 
 (defun jtl-jump-mark (mark)
   (switch-to-buffer (marker-buffer mark))
@@ -119,6 +123,25 @@ a.txt line 1  ;-> (a.txt, 1) (Perl)
 
 (defun jtl-push-history (str)
   (setq jtl-history (cons str jtl-history)))
+
+(defun jtl-highlight-line (seconds)
+  (jtl-highlight-line-start)
+  (sit-for 0.3)
+  (jtl-highlight-line-end))
+
+(defvar jtl-match-line-overlay nil)
+
+(defun jtl-highlight-line-start ()
+  (let ((args (list (line-beginning-position) (1+ (line-end-position)) nil)))
+    (if (not jtl-match-line-overlay)
+        (setq jtl-match-line-overlay (apply 'make-overlay args))
+      (apply 'move-overlay jtl-match-line-overlay args))
+    (overlay-put jtl-match-line-overlay 'face 'jtl-highlight-line-face)))
+
+(defun jtl-highlight-line-end ()
+  (when jtl-match-line-overlay
+    (delete-overlay jtl-match-line-overlay)
+    (setq jtl-match-line-overlay nil)))
 
 (provide 'jump-to-line)
 ;;; jump-to-line.el ends here
