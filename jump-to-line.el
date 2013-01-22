@@ -63,7 +63,8 @@
   "Comment."
   (interactive "P")
   (let ((pair            (jtl-ffap-file-line-at-point))
-        (is-other-window (consp n)))
+        (is-other-window (or (consp n)
+                             (js-popup-window-p))))
     (jtl-push-stack (point-marker))
     (if pair
         (let ((filename (car pair))
@@ -147,6 +148,12 @@ a.txt line 1  ;-> (a.txt, 1) (Perl)
   (when jtl-match-line-overlay
     (delete-overlay jtl-match-line-overlay)
     (setq jtl-match-line-overlay nil)))
+
+(defun js-popup-window-p ()
+  (if (and
+       (featurep 'popwin)
+       (popwin:popup-window-live-p))
+      (eq popwin:popup-window (selected-window))))
 
 (provide 'jump-to-line)
 ;;; jump-to-line.el ends here
