@@ -132,7 +132,7 @@ a.txt line 1  ;-> (a.txt, 1) (Perl)
 
 (defun jtl-highlight-line (seconds)
   (jtl-highlight-line-start)
-  (sit-for 0.3)
+  (sit-for seconds)
   (jtl-highlight-line-end))
 
 (defvar jtl-match-line-overlay nil)
